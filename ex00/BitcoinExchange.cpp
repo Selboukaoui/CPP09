@@ -2,6 +2,36 @@
 #include <fstream>
 #include <ctype.h>
 
+
+
+void BinarySearch(std::map<int, double> &dataCsv, int target)
+{
+    // int left = 0;
+    // int right = dataCsv.size() - 1;
+
+    // while (left < right)
+    // {
+    //     int mid = left + (right - left) / 2;
+
+    //     // if (dataCsv[mid].)
+    // } 
+
+}
+
+void display_value(std::map<int, double> &dataCsv, std::map<int, double> &dataInput)
+{
+    std::map<int, double>::iterator it = dataInput.begin();
+
+    std::binary_search(dataCsv.begin(), dataCsv.end(), it->first);
+}
+
+
+
+
+
+
+
+
 std::string trim(const std::string &str)
 {
     size_t start = 0;
@@ -15,7 +45,7 @@ std::string trim(const std::string &str)
     return str.substr(start, end - start);
 }
 
-bool parseline(const std::string &line)
+bool parseline(const std::string &line, std::map<int, double> &data)
 {
     if (line.empty())
     {
@@ -28,7 +58,10 @@ bool parseline(const std::string &line)
     int maxDay;
     std::string dateVal;
 
+
     //parse Date/year should be 4 number and up of 1900 and less than 3000
+
+    // parse year
     int i = 0;
     for (; i < 4; i++)
     {
@@ -48,10 +81,9 @@ bool parseline(const std::string &line)
     }
 
     year = atoi(dateVal.c_str());
+
     // parse month
-
     dateVal.clear();
-
     int j = 0;
     for (; j < 2; j++)
     {
@@ -106,7 +138,8 @@ bool parseline(const std::string &line)
             month = -1;
     }
 
-    if (atoi(dateVal.c_str()) < 1 && atoi(dateVal.c_str()) > maxDay)
+    int day = atoi(dateVal.c_str());
+    if (day < 1 && day > maxDay)
     {
         throw std::runtime_error("bad input => " + line);
         return false;        
@@ -123,9 +156,6 @@ bool parseline(const std::string &line)
     }
     
     // parse value
-
-    // std::cout << line[i] << std::endl;
-
     dateVal.clear();
     int Onepoint = 0;
     j = 0;
@@ -153,8 +183,6 @@ bool parseline(const std::string &line)
 
 
     double btcVal = strtod(dateVal.c_str(), NULL);
-    // std::cout << btcVal << std::endl;
-
     if (btcVal < 0){
         throw std::runtime_error("not a positive number.");
         return false;        
@@ -165,15 +193,21 @@ bool parseline(const std::string &line)
         return false;
     }
 
+    // load input data:
+
+    data.insert(std::pair<int, double>((year * 10000 + month * 100 + day), btcVal));
+
+    std::cout << (year * 10000 + month * 100 + day) << "   " << btcVal << std::endl; 
+
     return true;
 }
 
 
 
-void parsingInput(const std::string &InputFileName)
+void parsingInput(const std::string &FileName)
 {
     // open file:
-    std::ifstream InputFile(InputFileName.c_str());
+    std::ifstream InputFile(FileName.c_str());
 
     // check if it's opened:
     if (!InputFile.is_open())
@@ -192,20 +226,63 @@ void parsingInput(const std::string &InputFileName)
         return ;
     }
 
-    // std::map<std::string, int> data;
+    std::map<int, double> data;
 
     while (std::getline(InputFile, line))
     {
 
             try {
-                parseline(trim(line));
-                std::cout << line << std::endl;
+                parseline(trim(line), data);
+
+                // output here 
+                // std::cout << line << std::endl;
             }
             catch (std::exception &e)
             {
                 std::cout << "Error: " << e.what() << std::endl;
             }
     }
-    
+}
+
+
+
+
+void loadData(const std::string &FileName, std::map<int, double> &dataCsv)
+{
+    // open file:
+    std::ifstream InputFile(FileName.c_str());
+
+    // check if it's opened:
+    if (!InputFile.is_open())
+    {
+        throw std::runtime_error("Fialed to open input file");
+        return ;
+    }
+
+
+    std::string line;
+    std::getline(InputFile, line);
+
+
+    while (std::getline(InputFile, line))
+    {
+        int comma = 0;
+        int date = 0;
+        double exchange_rate = 0;
+
+        for (size_t i = 0; i < line.length(); i++)
+        {
+            if (isdigit(line[i]) && comma == 0)
+                date = date * 10 + (line[i] - '0');
+            else if (line[i] == ',')
+            {
+                comma = 1;
+                i++;
+                exchange_rate = strtod(&line[i], NULL);
+                break ;
+            }
+        }
+        dataCsv.insert(std::pair<int, double>(date, exchange_rate));
+    }
 
 }
