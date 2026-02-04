@@ -1,0 +1,31 @@
+#include "BitcoinExchange.hpp"
+
+
+
+
+int main(int ac, char **av)
+{
+    (void)ac;
+    if (!av[1]){
+        std::cout << "Error: Add input file path < ./btc input.txt >" << std::endl;
+        return 0;
+    }
+
+    std::string InputFile = av[1] ;
+
+    // open input file + parse the content :
+    try{
+        parsingInput(InputFile);
+    }
+    catch (std::exception &e)
+    {
+        std::cout << "Error: " << e.what() << std::endl;
+        return 0;
+    }
+
+
+
+
+
+
+}
