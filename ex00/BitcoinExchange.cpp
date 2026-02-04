@@ -1,36 +1,4 @@
 #include "BitcoinExchange.hpp"
-#include <fstream>
-#include <ctype.h>
-
-
-
-void BinarySearch(std::map<int, double> &dataCsv, int target)
-{
-    // int left = 0;
-    // int right = dataCsv.size() - 1;
-
-    // while (left < right)
-    // {
-    //     int mid = left + (right - left) / 2;
-
-    //     // if (dataCsv[mid].)
-    // } 
-
-}
-
-void display_value(std::map<int, double> &dataCsv, std::map<int, double> &dataInput)
-{
-    std::map<int, double>::iterator it = dataInput.begin();
-
-    std::binary_search(dataCsv.begin(), dataCsv.end(), it->first);
-}
-
-
-
-
-
-
-
 
 std::string trim(const std::string &str)
 {
@@ -45,7 +13,7 @@ std::string trim(const std::string &str)
     return str.substr(start, end - start);
 }
 
-bool parseline(const std::string &line, std::map<int, double> &data)
+bool ParseAndExcuteLine(const std::string &line, std::map<int, double> &data, std::map<int, double> &dataCsv)
 {
     if (line.empty())
     {
@@ -57,7 +25,6 @@ bool parseline(const std::string &line, std::map<int, double> &data)
     int month;
     int maxDay;
     std::string dateVal;
-
 
     //parse Date/year should be 4 number and up of 1900 and less than 3000
 
@@ -194,17 +161,33 @@ bool parseline(const std::string &line, std::map<int, double> &data)
     }
 
     // load input data:
+    int date = year * 10000 + month * 100 + day;
+    data.insert(std::pair<int, double>(date, btcVal));
 
-    data.insert(std::pair<int, double>((year * 10000 + month * 100 + day), btcVal));
 
-    std::cout << (year * 10000 + month * 100 + day) << "   " << btcVal << std::endl; 
+    
+    // search and execute
 
+    std::map<int, double>::iterator it;
+
+    it = dataCsv.find(date);
+    if (it == dataCsv.end())
+    {
+        it = dataCsv.lower_bound(date);
+        if (it != dataCsv.begin())
+            --it;
+    }
+    
+    if (it != dataCsv.end())
+        std::cout << year << "-" << std::setw(2) << std::setfill('0') << month << "-" << std::setw(2) << std::setfill('0') << day << " => " << btcVal << " = " << it->second * btcVal <<std::endl;
+    else
+        std::cout << date <<"  Not found" << std::endl;
     return true;
 }
 
 
 
-void parsingInput(const std::string &FileName)
+void parsingInput(const std::string &FileName, std::map<int, double> &dataCsv)
 {
     // open file:
     std::ifstream InputFile(FileName.c_str());
@@ -230,12 +213,8 @@ void parsingInput(const std::string &FileName)
 
     while (std::getline(InputFile, line))
     {
-
             try {
-                parseline(trim(line), data);
-
-                // output here 
-                // std::cout << line << std::endl;
+                ParseAndExcuteLine(trim(line), data, dataCsv);
             }
             catch (std::exception &e)
             {
