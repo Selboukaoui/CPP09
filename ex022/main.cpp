@@ -6,18 +6,18 @@ int main(int ac, char **av)
         std::cerr << "Error\n";
         return 1;
     }
-    try {
-        PmergeMe p(av);
+    try 
+    {
+        PmergeMe S(av);
+        S.printNumbers("Before: ");
 
-        p.printNumbers("Before: ");
+        S.sortVector();
+        S.sortDeque();
 
-        p.sortVector();
-        p.sortDeque();
+        S.printNumbers("After: ");
 
-        p.printNumbers("After:  ");
-
-        p.printVectorTime();
-        p.printDequeTime(); 
+        S.printVectorTime();
+        S.printDequeTime();
     }
     catch (const std::exception &e) {
         std::cerr << e.what() << "\n";
