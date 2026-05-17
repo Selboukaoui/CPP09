@@ -7,22 +7,22 @@ void PmergeMe::parse(char **av)
         const std::string s(av[i]);
 
         if (s.empty())
-            throw std::runtime_error("Parsing Error");
+            throw std::runtime_error("Error");
 
         for (size_t j = 0; j < s.size(); ++j)
             if (!std::isdigit(static_cast<unsigned char>(s[j])))
-                throw std::runtime_error("Parsing Error");
+                throw std::runtime_error("Error");
 
         const long n = std::atol(s.c_str());
         if (n < 0 || n > 2147483647L)
-            throw std::runtime_error("Parsing Error");
+            throw std::runtime_error("Error");
 
         vec.push_back(static_cast<int>(n));
         deq.push_back(static_cast<int>(n));
     }
 
     if (vec.empty())
-        throw std::runtime_error("Parsing Error");
+        throw std::runtime_error("Error");
 }
 
 PmergeMe::PmergeMe(char **av) : vStart(0), vEnd(0), dStart(0), dEnd(0) { parse(av); }
