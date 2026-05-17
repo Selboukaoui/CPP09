@@ -167,7 +167,7 @@ void parsingInput(const std::string &FileName, std::map<int, double> &dataCsv)
     // check if it's opened:
     if (!InputFile.is_open())
     {
-        throw std::runtime_error("Failed to open input file");
+        throw std::runtime_error("Failed to open input file :  " + FileName);
     }
 
     // Parse content:       Bad date, invalid value > 1000 or negative 
