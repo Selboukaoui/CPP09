@@ -20,7 +20,7 @@ void ParseAndExcuteLine(const std::string &line, std::map<int, double> &data, st
 
     int year;
     int month;
-    int maxDay;
+    int maxDay = 0;
     std::string dateVal;
 
     //parse Date/year should be 4 number and up of 1900 and less than 3000 
@@ -103,13 +103,15 @@ void ParseAndExcuteLine(const std::string &line, std::map<int, double> &data, st
     // parse value 
     dateVal.clear();
     int OneDot = 0;
+    bool signSeen = false;
 
     while (line[i])
     {
-        if (line[i] == '-' || line[i] == '+')
+        if ((line[i] == '-' || line[i] == '+') && signSeen == false)
         {
             dateVal.push_back(line[i]);
             i++;
+            signSeen = true;
             continue;
         }
         
