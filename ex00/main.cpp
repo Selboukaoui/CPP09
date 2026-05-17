@@ -2,8 +2,7 @@
 
 int main(int ac, char **av)
 {
-    (void)ac;
-    if (!av[1])
+    if (ac != 2)
     {
         std::cout << "Error: Add input file path < ./btc input.txt >" << std::endl;
         return 0;
@@ -18,7 +17,7 @@ int main(int ac, char **av)
     }
     catch (std::exception &e)
     {
-        std::cout << "Error: " << e.what() << std::endl;
+        std::cerr << "Error: " << e.what() << std::endl;
         return 0;
     }
 
@@ -28,7 +27,7 @@ int main(int ac, char **av)
     }
     catch (std::exception &e)
     {
-        std::cout << "Error: " << e.what() << std::endl;
+        std::cerr << "Error: " << e.what() << std::endl;
         return 0;
     }
 }
