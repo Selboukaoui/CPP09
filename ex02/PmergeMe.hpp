@@ -31,11 +31,11 @@ public:
 
 private:
     // ── data ──────────────────────────────────────────────────────────────────
-    std::vector<int> _vec;
-    std::deque<int>  _deq;
+    std::vector<int> vec;
+    std::deque<int>  deq;
 
-    clock_t _vStart, _vEnd;
-    clock_t _dStart, _dEnd;
+    clock_t vStart, vEnd;
+    clock_t dStart, dEnd;
 
     // ── helpers ───────────────────────────────────────────────────────────────
     void parse(char **av);
